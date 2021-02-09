@@ -1,0 +1,10 @@
+name = "PiAVR"
+uuid = "f82d0a5e-37c7-4c6d-97a6-675ba479f9be"
+authors = ["notinaboat <notinaboat@icloud.com>"]
+version = "0.1.0"
+
+[deps]
+BBSPI = "d9c4ebee-6e29-4c04-a492-1c21dbbc648c"
+PiAVRDude = "fc7a79b2-3e76-4256-aa87-83c70dbc2f22"
+PiGPIOC = "30a511cb-78f8-4457-8440-9b2c99933694"
+PiGPIOMEM = "1cdbf0ad-f496-4de0-97e4-602941adc73e"
