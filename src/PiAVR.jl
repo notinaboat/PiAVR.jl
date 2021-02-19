@@ -11,8 +11,11 @@ BBSPI.delay(s::BBSPI.SPISlave) = PiGPIOMEM.spin(1000)
 include("serial_read.jl")
 include("c_compile.jl")
 
+const ENABLE_GPIOC = false
 
-const init_done = Ref(false)
+@static if ENABLE_GPIOC
+const gpioc_init_done = Ref(false)
+end
 
 mutable struct AVRDevice{T}
 
@@ -42,11 +45,24 @@ mutable struct AVRDevice{T}
 
         @assert bin_file == nothing || c_file == nothing
 
-        if !init_done[]
-            gpioCfgClock(10, 1, 1); # us, PCM, ignored
-            res = gpioInitialise();
-            @assert(res != PI_INIT_FAILED)
-            init_done[] = true
+        if bin_file == nothing
+            f = replace(c_file, r".c$" => ".hex")
+            if isfile(f)
+                bin_file = f
+            end
+            f = replace(c_file, r".c$" => ".elf")
+            if isfile(f)
+                bin_file = f
+            end
+        end
+
+        @static if ENABLE_GPIOC
+            if !gpioc_init_done[]
+                gpioCfgClock(10, 1, 1); # us, PCM, ignored
+                res = gpioInitialise();
+                @assert(res != PI_INIT_FAILED)
+                gpioc_init_done[] = true
+            end
         end
 
         spi = BBSPI.SPISlave(cs = Ref(false),

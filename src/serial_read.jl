@@ -1,8 +1,10 @@
 # Read 32-bit serial data from ISP_MISO pin.
 
+@static if ENABLE_GPIOC
 using PiGPIOC: gpioCfgClock, gpioInitialise, gpioDelay
 using PiGPIOC: gpioSerialReadOpen, gpioSerialReadClose, gpioSerialRead
 using PiGPIOC: PI_INIT_FAILED
+end
 
 const SERIAL_BAUD = 10000
 const SERIAL_BITS = 32
@@ -12,6 +14,7 @@ const TAG_PRINTN = 0b100
 const TAG_ERROR  = 0b111
 
 
+@static if ENABLE_GPIOC
 function read_open(avr)
     assert_reset(avr)
     err = gpioSerialReadOpen(avr.miso, SERIAL_BAUD, SERIAL_BITS);
@@ -30,18 +33,20 @@ end
 function read_close(avr)
     gpioSerialReadClose(avr.miso)
 end
+end
+
 
 function source_line(avr, address)
     if haskey(avr.linecache, address)
         source_line, line_text = avr.linecache[address]
     else
-        cmd = `avr-addr2line -e $(avr.avrbin) 0x$(string(address, base=16))`
+        cmd = `avr-addr2line -e $(avr.bin_file) 0x$(string(address, base=16))`
         source_line = try chomp(read(cmd, String)) catch err "?" end
         file, line_no = split(source_line, ":")
         line_text = try
-            nth(eachline(file), parse(Int, line_no))
+            [eachline(file)...][parse(Int, line_no)]
         catch err
-            string(v[1], base=16)
+            "$file:$line_no"
         end
         avr.linecache[address] = (source_line, line_text)
     end

@@ -1,13 +1,14 @@
 function compile_c(avr)
 
-    avr_flags = `-DF_CPU=$(avr.clock_hz) -mmcu=$(avr.device)`
-    c_flags = `-g -O3 $gcc_flags $avr_flags -I $(avr.c_header_dir)`
+    avr_flags = `-DF_CPU=$(avr.clock_hz)UL -mmcu=$(avr.device)`
+    inc = avr.c_header_dir == nothing ? `` : `-I $(avr.c_header_dir)`
+    c_flags = `-g -O3 $gcc_flags $avr_flags $inc`
 
     c_dir = dirname(avr.c_file)
 
     # Compile C to ELF...
     elf_file = joinpath(c_dir, "main.elf")
-    println("Running: ", `avr-gcc $c_flags $avr_flags ... $(avr.c_file)`)
+    println("Running: ", `avr-gcc $c_flags ... $(avr.c_file)`)
     run(`avr-gcc $c_flags -o $elf_file $(avr.c_file)`)
 
     # Generate verbose ASM and memory dump for debug...
