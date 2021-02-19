@@ -8,10 +8,11 @@ using PiGPIOMEM
 using BBSPI
 BBSPI.delay(s::BBSPI.SPISlave) = PiGPIOMEM.spin(1000)
 
+const ENABLE_GPIOC = false
+
 include("serial_read.jl")
 include("c_compile.jl")
 
-const ENABLE_GPIOC = false
 
 @static if ENABLE_GPIOC
 const gpioc_init_done = Ref(false)
