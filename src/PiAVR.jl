@@ -115,6 +115,12 @@ function release_reset(avr)
     set_input_mode(avr.reset)
 end
 
+function reset(avr)
+    assert_reset(avr)
+    sleep(0.5)
+    release_reset(avr)
+end
+
 
 function fuse(avr::AVRDevice)
     for f in avr.fuses
