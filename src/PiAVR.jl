@@ -138,4 +138,9 @@ function flash(avr::AVRDevice)
 end
 
 
+function eeprom(avr::AVRDevice)
+    PiAVRDude.eeprom(avr.isp, avr.bin_file)
+end
+
+
 end # module

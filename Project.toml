@@ -1,7 +1,7 @@
 name = "PiAVR"
 uuid = "f82d0a5e-37c7-4c6d-97a6-675ba479f9be"
 authors = ["notinaboat <notinaboat@icloud.com>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 BBSPI = "d9c4ebee-6e29-4c04-a492-1c21dbbc648c"
