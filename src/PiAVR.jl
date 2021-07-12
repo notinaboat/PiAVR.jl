@@ -23,8 +23,8 @@ mutable struct AVRDevice{T}
     device::String
     clock_hz::Int32
     fuses::Vector{String}
-    reset::GPIOPin
-    miso::Int8
+    reset::Union{GPIOPin, Nothing}
+    miso::Union{Int8, Nothing}
     spi::T
     isp::AVRDude
     c_file::Union{String, Nothing}
@@ -42,7 +42,8 @@ mutable struct AVRDevice{T}
                       reset_pin = nothing,
                         clk_pin = nothing, 
                        mosi_pin = nothing, 
-                       miso_pin = nothing)
+                       miso_pin = nothing,
+                       usb_port = nothing)
 
         @assert bin_file == nothing || c_file == nothing
 
@@ -66,21 +67,27 @@ mutable struct AVRDevice{T}
             end
         end
 
-        spi = BBSPI.SPISlave(cs = Ref(false),
-                            clk = GPIOPin(clk_pin),
-                           mosi = GPIOPin(mosi_pin),
-                           miso = Ref(false))
+        spi = if usb_port == nothing
+            BBSPI.SPISlave(cs = Ref(false),
+                          clk = GPIOPin(clk_pin),
+                         mosi = GPIOPin(mosi_pin),
+                         miso = Ref(false))
+        else
+            nothing
+        end
 
         isp = AVRDude(device=device,
                          sck=clk_pin,
                         miso=miso_pin,
                         mosi=mosi_pin,
-                       reset=reset_pin)
+                       reset=reset_pin,
+                    usb_port=usb_port)
 
         avr = new{typeof(spi)}(device,
                                clock_hz,
                                fuses,
-                               GPIOPin(reset_pin),
+                               reset_pin == nothing ? nothing :
+                                                      GPIOPin(reset_pin),
                                miso_pin,
                                spi,
                                isp,
@@ -135,6 +142,11 @@ function flash(avr::AVRDevice)
     end
 
     PiAVRDude.flash(avr.isp, avr.bin_file)
+end
+
+
+function flash_c_file(avr::AVRDevice, c_file)
+    PiAVRDude.flash(avr.isp, compile_c(avr, c_file))
 end
 
 
