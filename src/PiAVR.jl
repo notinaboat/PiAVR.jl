@@ -141,6 +141,7 @@ function flash(avr::AVRDevice)
         avr.bin_file = compile_c(avr)
     end
 
+    @info read(`md5sum $(avr.bin_file)`, String)
     PiAVRDude.flash(avr.isp, avr.bin_file)
 end
 
