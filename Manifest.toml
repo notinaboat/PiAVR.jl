@@ -1,0 +1,57 @@
+# This file is machine-generated - editing it directly is not advised
+
+[[BBSPI]]
+path = "../BBSPI"
+uuid = "d9c4ebee-6e29-4c04-a492-1c21dbbc648c"
+version = "0.1.0"
+
+[[CEnum]]
+git-tree-sha1 = "215a9aa4a1f23fbd05b92769fdd62559488d70e9"
+uuid = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+version = "0.4.1"
+
+[[LLVM]]
+deps = ["CEnum", "Libdl", "Printf", "Unicode"]
+git-tree-sha1 = "a2101830a761d592b113129887fda626387f68d4"
+uuid = "929cbde3-209d-540e-8aea-75f648917ca0"
+version = "3.5.1"
+
+[[Libdl]]
+uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+
+[[Mmap]]
+uuid = "a63ad114-7e13-5084-954f-fe012c677804"
+
+[[PiAVRDude]]
+path = "../PiAVRDude"
+uuid = "fc7a79b2-3e76-4256-aa87-83c70dbc2f22"
+version = "0.1.2"
+
+[[PiGPIOC]]
+path = "../PiGPIOC"
+uuid = "30a511cb-78f8-4457-8440-9b2c99933694"
+version = "0.1.0"
+
+[[PiGPIOMEM]]
+deps = ["LLVM", "Mmap"]
+path = "../PiGPIOMEM"
+uuid = "1cdbf0ad-f496-4de0-97e4-602941adc73e"
+version = "0.1.0"
+
+[[Printf]]
+deps = ["Unicode"]
+uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[ReadmeDocs]]
+path = "../ReadmeDocs"
+uuid = "c63066b3-de92-487d-9da7-7c375a07912b"
+version = "0.1.0"
+
+[[Unicode]]
+uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+
+[[UnixIO]]
+deps = ["ReadmeDocs"]
+path = "../UnixIO"
+uuid = "86724fa0-f1e0-464a-a4b2-d754f3ca1f13"
+version = "0.1.0"
